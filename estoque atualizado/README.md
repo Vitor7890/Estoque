@@ -3,6 +3,18 @@
 > Módulo de gerenciamento de estoque responsável pelo controle de produtos em locais físicos e pelo registro de
 > movimentações de entrada e saída.
 ---
+
+## 📁 Estrutura do Projeto
+
+```
+estoque_api/
+├── main.py          # rotas da API (endpoints)
+├── database.py      # conexão com o PostgreSQL
+├── schemas.py       # modelos de dados (Pydantic)
+├── requirements.txt # dependências Python
+└── README.md        # este arquivo
+```
+
 ## 📋 Descrição
 
 Esta API faz parte de um sistema distribuído maior, sendo responsável pelo **módulo de estoque**. Ela expõe endpoints REST para gerenciar três recursos principais:
@@ -14,6 +26,13 @@ Esta API faz parte de um sistema distribuído maior, sendo responsável pelo **m
 ---
 
 ## 🚀 Como executar
+
+Antes de executar, certifique-se de ter:
+
+- **Python** na versão mais recente
+- **PostgreSQL** — o banco de dados usado pela API
+
+---
 
 ### 1. Clone ou baixe o projeto
 
@@ -40,62 +59,6 @@ cp .env.example .env
 uvicorn main:app --reload
 ```
 
-
-## ✅ O que você precisa ter instalado
-
-Antes de rodar a API, certifique-se de ter:
-
-- **Python** na versão **3.8 ou mais recente**
-  - Não sabe se tem? Abra o terminal e digite:
-    ```bash
-    python --version
-    ```
-- **PostgreSQL** — o banco de dados usado pela API
-
----
-
-## 🗂️ O que você pode fazer com a API
-
-A API está dividida em três áreas principais:
-
----
-
-###  Locais Físicos
-> São os lugares onde os produtos ficam guardados. Ex: "Prateleira A", "Galpão 2".
-
-- **Criar** um novo local
-- **Ver todos** os locais cadastrados
-- **Ver um local específico**
-- **Editar** as informações de um local
-- **Desativar ou excluir** um local
-
----
-
-### 📦 Estoque
-> Controla quais produtos estão em quais locais e em que quantidade.
-
-- **Cadastrar** um produto em um local com uma quantidade inicial
-- **Ver tudo** que está no estoque
-- **Consultar** quanto tem de um produto (em todos os locais)
-- **Aumentar ou diminuir** a quantidade de um produto
-- **Remover** um produto do controle de estoque
-
----
-
-### 🔄 Movimentações
-> Registra toda vez que um produto entra ou sai do estoque.
-
-- **Registrar entrada** de um produto
-- **Registrar saída** de um produto
-- **Ver o histórico completo** de movimentações
-- **Adicionar uma observação** — ex: `"compra do mês"`, `"venda para cliente X"`
-- **Corrigir** o tipo ou a observação de uma movimentação
-
-> ⚠️ **Atenção:** Se você **excluir** uma movimentação, a quantidade do estoque
-> **não volta** ao valor anterior. Se errar, crie uma nova movimentação para corrigir.
-
----
-
 ## ⚠️ Regras importantes
 
 A API segue algumas regras automáticas para evitar erros:
@@ -112,10 +75,7 @@ A API segue algumas regras automáticas para evitar erros:
 
 ---
 
-## 🗺️ Rotas disponíveis
-
-> As "rotas" são os endereços que você acessa na API para fazer cada coisa.
-> Pense nelas como páginas de um site, mas para dados.
+## 📌 Endpoints disponíveis
 
 | Endereço              | O que faz                              |
 |-----------------------|----------------------------------------|
@@ -125,55 +85,44 @@ A API segue algumas regras automáticas para evitar erros:
 | `/estoques/{id}`      | Mostra, edita ou exclui um estoque     |
 | `/movimentacoes`      | Lista ou cria movimentações            |
 | `/movimentacoes/{id}` | Mostra, edita ou exclui uma movimentação |
-| `/health`             | Verifica se a API e o banco estão ok   |
+| `/health`             | Verifica a saude da API e do banco|
 
 ---
 
-##  Referência completa das rotas
+### Geral
+| Método  | Rota      | Descrição                        |
+|---------|-----------|----------------------------------|
+| `GET`   | `/health` | Saúde da API e do banco de dados |
 
-###  Locais
-> Lugares onde você guarda os produtos (prateleira, galpão, etc).
+### Local Físico
+| Método   | Rota              | Descrição                        |
+|----------|-------------------|----------------------------------|
+| `GET`    | `/locais`         | Listar todos os locais           |
+| `GET`    | `/locais/{id}`    | Buscar local por ID              |
+| `POST`   | `/locais`         | Criar novo local físico          |
+| `PUT`    | `/locais/{id}`    | Atualizar local físico           |
+| `DELETE` | `/locais/{id}`    | Remover local físico             |
 
-| Método | Endereço | O que faz |
-|--------|----------|-----------|
-| `GET` | `/locais` | Ver todos os lugares |
-| `GET` | `/locais/{id}` | Ver um lugar específico |
-| `POST` | `/locais` | Criar um lugar novo |
-| `PUT` | `/locais/{id}` | Editar um lugar |
-| `DELETE` | `/locais/{id}` | Apagar um lugar |
+### Estoque
+| Método   | Rota                          | Descrição                              |
+|----------|-------------------------------|----------------------------------------|
+| `GET`    | `/estoques`                   | Listar todos os registros de estoque   |
+| `GET`    | `/estoques/{id}`              | Buscar registro por ID                 |
+| `GET`    | `/estoques/produto/{id}`      | Buscar estoque de um produto específico|
+| `POST`   | `/estoques`                   | Criar novo registro de estoque         |
+| `PUT`    | `/estoques/{id}`              | Atualizar registro de estoque          |
+| `DELETE` | `/estoques/{id}`              | Remover registro de estoque            |
 
-### 📦 Estoque
-> Quantos produtos você tem em cada lugar.
-
-| Método | Endereço | O que faz |
-|--------|----------|-----------|
-| `GET` | `/estoques` | Ver todo o estoque |
-| `GET` | `/estoques/{id}` | Ver um registro específico |
-| `GET` | `/estoques/produto/{produto_id}` | Ver estoque de um produto |
-| `POST` | `/estoques` | Criar registro de estoque |
-| `PUT` | `/estoques/{id}` | Editar um registro |
-| `DELETE` | `/estoques/{id}` | Apagar um registro |
-
-### 🔄 Movimentações
-> Cada vez que você coloca ou retira produtos do estoque.
-
-| Método | Endereço | O que faz |
-|--------|----------|-----------|
-| `GET` | `/movimentacoes` | Ver todas as movimentações |
-| `GET` | `/movimentacoes/{id}` | Ver uma movimentação |
-| `GET` | `/movimentacoes/estoque/{estoque_id}` | Ver movimentações de um estoque |
-| `POST` | `/movimentacoes` | Registrar entrada ou saída |
-| `PUT` | `/movimentacoes/{id}` | Editar observação |
-| `DELETE` | `/movimentacoes/{id}` | Apagar uma movimentação |
+### Movimentações
+| Método   | Rota                              | Descrição                              |
+|----------|-----------------------------------|----------------------------------------|
+| `GET`    | `/movimentacoes`                  | Listar todas as movimentações          |
+| `GET`    | `/movimentacoes/{id}`             | Buscar movimentação por ID             |
+| `GET`    | `/movimentacoes/estoque/{id}`     | Listar movimentações de um estoque     |
+| `POST`   | `/movimentacoes`                  | Registrar entrada ou saída             |
+| `PUT`    | `/movimentacoes/{id}`             | Atualizar tipo ou observação           |
+| `DELETE` | `/movimentacoes/{id}`             | Remover movimentação do histórico      |
 
 ---
-## 🗂️ Estrutura do projeto
 
-```
-estoque/
-├── database.py        # Conversa com o banco de dados
-├── main.py            # Coração da API
-├── schemas.py         # Moldes dos dados (formato esperado)
-├── requirements.txt   # Lista do que precisa instalar
-└── README.md          # Esse arquivo aqui
-```
+
