@@ -13,6 +13,34 @@ Esta API faz parte de um sistema distribuído maior, sendo responsável pelo **m
 
 ---
 
+## 🚀 Como executar
+
+### 1. Clone ou baixe o projeto
+
+### 2. Crie e ative um ambiente virtual
+```bash
+python -m venv venv
+source venv/bin/activate        # Linux / Mac
+venv\Scripts\activate           # Windows
+```
+
+### 3. Instale as dependências
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure as variáveis de ambiente
+```bash
+cp .env.example .env
+# Edite o .env e coloque sua senha do banco
+```
+
+### 5. Execute a API
+```bash
+uvicorn main:app --reload
+```
+
+
 ## ✅ O que você precisa ter instalado
 
 Antes de rodar a API, certifique-se de ter:
