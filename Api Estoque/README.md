@@ -1,134 +1,165 @@
-[README.md](https://github.com/user-attachments/files/26880505/README.md)
-# 🛒 API REST — Catálogo de Produtos
-### Disciplina: Sistemas Distribuídos
+# 📦 API de Controle de Estoque
+
+> Uma API para facilitar o dia a dia do estoque — controle de produtos,
+> locais de armazenamento e movimentações de entrada e saída.
+
+## O que essa API faz?
+
+Com ela você consegue:
+
+- 📍 Ver **onde cada produto está guardado**
+- 🔢 Saber **quantos itens** existem no momento
+- ➕➖ Registrar **entradas e saídas** de produtos
+- 📋 Manter um **histórico completo** de todas as movimentações
 
 ---
 
-## 📁 Estrutura do Projeto
+## ✅ O que você precisa ter instalado
 
-```
-cat_produtos_api/
-├── main.py          # rotas da API (endpoints)
-├── database.py      # conexão com o PostgreSQL
-├── schemas.py       # modelos de dados (Pydantic)
-├── requirements.txt # dependências Python
-├── .env.example     # modelo do arquivo de configuração
-└── README.md        # este arquivo
-```
+Antes de rodar a API, certifique-se de ter:
 
----
-
-## 🚀 Como executar
-
-### 1. Clone ou baixe o projeto
-
-### 2. Crie e ative um ambiente virtual
-```bash
-python -m venv venv
-source venv/bin/activate        # Linux / Mac
-venv\Scripts\activate           # Windows
-```
-
-### 3. Instale as dependências
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Configure as variáveis de ambiente
-```bash
-cp .env.example .env
-# Edite o .env e coloque sua senha do banco
-```
-
-### 5. Execute a API
-```bash
-uvicorn main:app --reload
-```
-
-### 6. Acesse a documentação automática
-- Swagger UI → http://localhost:8000/docs
-- ReDoc      → http://localhost:8000/redoc
+- **Python** na versão **3.8 ou mais recente**
+  - Não sabe se tem? Abra o terminal e digite:
+    ```bash
+    python --version
+    ```
+- **PostgreSQL** — o banco de dados usado pela API
 
 ---
 
-## 📌 Endpoints disponíveis
+## 🗂️ O que você pode fazer com a API
 
-| Método   | Rota                  | Descrição                        |
-|----------|-----------------------|----------------------------------|
-| `GET`    | `/`                   | Boas-vindas                      |
-| `GET`    | `/health`             | Saúde da API e do banco de dados |
-| `GET`    | `/produtos`           | Listar todos os produtos         |
-| `GET`    | `/produtos/{id}`      | Buscar produto por ID            |
-| `POST`   | `/produtos`           | Criar novo produto               |
-| `PUT`    | `/produtos/{id}`      | Atualizar produto                |
-| `DELETE` | `/produtos/{id}`      | Remover produto                  |
+A API está dividida em três áreas principais:
 
 ---
 
-## 🗄️ Estrutura da tabela `cat_produtos`
+### 📍 Locais físicos
+> São os lugares onde os produtos ficam guardados. Ex: "Prateleira A", "Galpão 2".
 
-| Campo        | Tipo                     | Descrição                     |
-|--------------|--------------------------|-------------------------------|
-| `id`         | uuid                     | Chave primária (auto-gerado)  |
-| `sku`        | character varying        | Código único do produto       |
-| `nome`       | character varying        | Nome do produto               |
-| `descricao`  | text                     | Descrição detalhada           |
-| `preco_venda`| numeric                  | Preço de venda                |
-| `ativo`      | boolean                  | Produto ativo no catálogo?    |
-| `created_at` | timestamp with time zone | Data de criação (auto-gerado) |
+- **Criar** um novo local
+- **Ver todos** os locais cadastrados
+- **Ver um local específico**
+- **Editar** as informações de um local
+- **Desativar ou excluir** um local
 
 ---
 
-## 🧪 Exemplos de uso (curl)
+### 📦 Estoque
+> Controla quais produtos estão em quais locais e em que quantidade.
 
-### Verificar saúde
-```bash
-curl http://localhost:8000/health
-```
-
-### Listar todos os produtos
-```bash
-curl http://localhost:8000/produtos
-```
-
-### Buscar produto por ID
-```bash
-curl http://localhost:8000/produtos/550e8400-e29b-41d4-a716-446655440000
-```
-
-### Criar produto
-```bash
-curl -X POST http://localhost:8000/produtos \
-  -H "Content-Type: application/json" \
-  -d '{
-    "sku": "PROD-001",
-    "nome": "Notebook Dell",
-    "descricao": "Notebook com 16GB RAM",
-    "preco_venda": 3499.90,
-    "ativo": true
-  }'
-```
-
-### Atualizar produto (apenas os campos desejados)
-```bash
-curl -X PUT http://localhost:8000/produtos/550e8400-e29b-41d4-a716-446655440000 \
-  -H "Content-Type: application/json" \
-  -d '{"preco_venda": 3299.90}'
-```
-
-### Deletar produto
-```bash
-curl -X DELETE http://localhost:8000/produtos/550e8400-e29b-41d4-a716-446655440000
-```
+- **Cadastrar** um produto em um local com uma quantidade inicial
+- **Ver tudo** que está no estoque
+- **Consultar** quanto tem de um produto (em todos os locais)
+- **Aumentar ou diminuir** a quantidade de um produto
+- **Remover** um produto do controle de estoque
 
 ---
 
-## 🧠 Conceitos aplicados
+### 🔄 Movimentações
+> Registra toda vez que um produto entra ou sai do estoque.
 
-- **REST** — arquitetura baseada em recursos e verbos HTTP
-- **FastAPI** — framework assíncrono com geração automática de documentação
-- **asyncpg** — acesso assíncrono ao PostgreSQL (não bloqueia o servidor)
-- **Pool de conexões** — reutilização eficiente de conexões com o banco
-- **Pydantic** — validação e serialização automática dos dados
-- **UUID** — identificadores únicos universais, ideais para sistemas distribuídos
-- **HTTP Status Codes** — 200 OK, 201 Created, 404 Not Found, 400 Bad Request
+- **Registrar entrada** de um produto
+- **Registrar saída** de um produto
+- **Ver o histórico completo** de movimentações
+- **Adicionar uma observação** — ex: `"compra do mês"`, `"venda para cliente X"`
+- **Corrigir** o tipo ou a observação de uma movimentação
+
+> ⚠️ **Atenção:** Se você **excluir** uma movimentação, a quantidade do estoque
+> **não volta** ao valor anterior. Se errar, crie uma nova movimentação para corrigir.
+
+---
+
+## ⚠️ Regras importantes
+
+A API segue algumas regras automáticas para evitar erros:
+
+- 🚫 **Quantidade nunca fica negativa**
+  - Se tentar dar saída de mais itens do que o estoque tem,
+    a API avisa o erro e **não deixa a operação acontecer**
+
+- 🏠 **Não é possível excluir um local que ainda tem produtos**
+  - Primeiro mova ou remova os produtos, depois exclua o local
+
+- 🔁 **Toda movimentação precisa ser de um tipo definido**
+  - Apenas **entrada** ou **saída** são aceitos
+
+---
+
+## 🗺️ Rotas disponíveis
+
+> As "rotas" são os endereços que você acessa na API para fazer cada coisa.
+> Pense nelas como páginas de um site, mas para dados.
+
+| Endereço              | O que faz                              |
+|-----------------------|----------------------------------------|
+| `/locais`             | Lista ou cria locais físicos           |
+| `/locais/{id}`        | Mostra, edita ou exclui um local       |
+| `/estoques`           | Lista ou cria registros de estoque     |
+| `/estoques/{id}`      | Mostra, edita ou exclui um estoque     |
+| `/movimentacoes`      | Lista ou cria movimentações            |
+| `/movimentacoes/{id}` | Mostra, edita ou exclui uma movimentação |
+| `/health`             | Verifica se a API e o banco estão ok   |
+
+---
+
+## 🔌 Referência completa das rotas
+
+### 📍 Locais
+> Lugares onde você guarda os produtos (prateleira, galpão, etc).
+
+| Método | Endereço | O que faz |
+|--------|----------|-----------|
+| `GET` | `/locais` | Ver todos os lugares |
+| `GET` | `/locais/{id}` | Ver um lugar específico |
+| `POST` | `/locais` | Criar um lugar novo |
+| `PUT` | `/locais/{id}` | Editar um lugar |
+| `DELETE` | `/locais/{id}` | Apagar um lugar |
+
+### 📦 Estoque
+> Quantos produtos você tem em cada lugar.
+
+| Método | Endereço | O que faz |
+|--------|----------|-----------|
+| `GET` | `/estoques` | Ver todo o estoque |
+| `GET` | `/estoques/{id}` | Ver um registro específico |
+| `GET` | `/estoques/produto/{produto_id}` | Ver estoque de um produto |
+| `POST` | `/estoques` | Criar registro de estoque |
+| `PUT` | `/estoques/{id}` | Editar um registro |
+| `DELETE` | `/estoques/{id}` | Apagar um registro |
+
+### 🔄 Movimentações
+> Cada vez que você coloca ou retira produtos do estoque.
+
+| Método | Endereço | O que faz |
+|--------|----------|-----------|
+| `GET` | `/movimentacoes` | Ver todas as movimentações |
+| `GET` | `/movimentacoes/{id}` | Ver uma movimentação |
+| `GET` | `/movimentacoes/estoque/{estoque_id}` | Ver movimentações de um estoque |
+| `POST` | `/movimentacoes` | Registrar entrada ou saída |
+| `PUT` | `/movimentacoes/{id}` | Editar observação |
+| `DELETE` | `/movimentacoes/{id}` | Apagar uma movimentação |
+
+---
+
+## 📖 Documentação interativa
+
+Com a API rodando, você pode acessar pelo navegador:
+
+- **`/docs`** → Documentação com exemplos e botões para testar as rotas
+- **`/redoc`** → Versão alternativa da documentação, mais detalhada
+
+> 💡 Dica: Esses endereços são ótimos para explorar a API sem precisar
+> escrever nenhum código!
+
+---
+
+## 🗂️ Estrutura do projeto
+
+```
+estoque/
+├── database.py        # Conversa com o banco de dados
+├── main.py            # Coração da API
+├── schemas.py         # Moldes dos dados (formato esperado)
+├── requirements.txt   # Lista do que precisa instalar
+└── README.md          # Esse arquivo aqui
+```
