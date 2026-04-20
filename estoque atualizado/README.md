@@ -1,16 +1,15 @@
-# 📦 API de Controle de Estoque
+# 📦 API REST — Módulo de Estoque
 
-> Uma API para facilitar o dia a dia do estoque — controle de produtos,
-> locais de armazenamento e movimentações de entrada e saída.
+> Módulo de gerenciamento de estoque responsável pelo controle de produtos em locais físicos e pelo registro de
+> movimentações de entrada e saída.
+---
+## 📋 Descrição
 
-## O que essa API faz?
+Esta API faz parte de um sistema distribuído maior, sendo responsável pelo **módulo de estoque**. Ela expõe endpoints REST para gerenciar três recursos principais:
 
-Com ela você consegue:
-
-- 📍 Ver **onde cada produto está guardado**
-- 🔢 Saber **quantos itens** existem no momento
-- ➕➖ Registrar **entradas e saídas** de produtos
-- 📋 Manter um **histórico completo** de todas as movimentações
+- **Locais Físicos** — cadastro e controle de locais de armazenamento.
+- **Estoque** — vínculo entre produtos e locais físicos, com controle de quantidade mínima e máxima
+- **Movimentações** — registro de entradas e saídas do estoque
 
 ---
 
