@@ -33,7 +33,7 @@ A API está dividida em três áreas principais:
 
 ---
 
-### 📍 Locais físicos
+###  Locais Físicos
 > São os lugares onde os produtos ficam guardados. Ex: "Prateleira A", "Galpão 2".
 
 - **Criar** um novo local
@@ -102,9 +102,9 @@ A API segue algumas regras automáticas para evitar erros:
 
 ---
 
-## 🔌 Referência completa das rotas
+##  Referência completa das rotas
 
-### 📍 Locais
+###  Locais
 > Lugares onde você guarda os produtos (prateleira, galpão, etc).
 
 | Método | Endereço | O que faz |
