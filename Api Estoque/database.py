@@ -31,7 +31,7 @@ async def criar_pool() -> None:
     """
     Cria o pool de conexões com o banco de dados.
     Chamada automaticamente quando a API inicia.
-    """
+    """ 
     global _pool
     
     # Configurar SSL para conexões remotas (como Supabase)
