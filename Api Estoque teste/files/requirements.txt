@@ -1,0 +1,8 @@
+# requirements.txt
+# Instale com: pip install -r requirements.txt
+
+fastapi==0.115.0        # framework web
+uvicorn[standard]==0.30.6  # servidor ASGI para rodar a API
+asyncpg==0.29.0         # driver assíncrono para PostgreSQL
+pydantic==2.7.4         # validação de dados
+python-dotenv==1.0.1    # leitura do arquivo .env
